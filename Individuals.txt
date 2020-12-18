@@ -1,0 +1,8 @@
+FName1#LName1#Age1#male#University1,FName2#LName2#Age2#male#University2
+FName1#LName1#Age1#male#University1,FName3#LName3#Age3#male#University3
+FName7#LName7#Age7#female#University7,FName1#LName1#Age1#male#University1
+FName7#LName7#Age7#female#University7,FName2#LName2#Age2#male#University2
+FName6#LName6#Age6#female#University6,FName7#LName7#Age7#female#University7
+FName4#LName4#Age4#male#University4,FName6#LName6#Age6#female#University6
+FName4#LName4#Age4#male#University4,FName5#LName5#Age5#male#University5
+FName5#LName5#Age5#male#University5,FName6#LName6#Age6#female#University6
