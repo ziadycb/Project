@@ -190,15 +190,12 @@ void DisplayRelations(World * w)
 			cout << "No Friends";
 		}
         
-		while (curr->next != NULL)
+		while (curr != NULL)
 		{
 			cout << cur->FirstName << " " << cur->LastName << " is friends with " << curr->self->FirstName << " " << curr->self->LastName << endl;
 			curr = curr->next;
 		}
-        
-        
-        cout << cur->FirstName << " " << cur->LastName << " is friends with " << curr->self->FirstName << " " << curr->self->LastName << endl;
-		curr = curr->next;
+		
 		cur = cur->next;
         cout<<"------------------"<<endl;
 	}
