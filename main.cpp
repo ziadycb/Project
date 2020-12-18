@@ -204,7 +204,7 @@ void DisplayRelations(World * w)
 
 void Parse_World()
 {
-	ifstream inFile("Individuals.txt");
+	ifstream inFile("Filex.txt");
 	string line1;
 	string line2;
 	World *world = Initialize_World();
@@ -236,6 +236,7 @@ void Parse_World()
 		pos = 0;
 		i = 0;
 		string individual2[5];
+
 		while ((pos = line2.find(delimiter)) != string::npos)
 		{
 			individual2[i] = line2.substr(0, pos);
