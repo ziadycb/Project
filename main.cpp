@@ -215,21 +215,16 @@ void Parse_World()
 		getline(inFile, line2, '\n');
 		cout << line1 << "\n";
 
-		char FirstName[30], LastName[30], University[30];
-		int Age;
-		bool gender;
 
 		// Individual 1    
 		string delimiter = "#";
 		size_t pos = 0;
-		string token;
 		string individual1[5];
 		int i = 0;
 
 		while ((pos = line1.find(delimiter)) != string::npos)
 		{
-			token = line1.substr(0, pos);
-			individual1[i] = token;
+			individual1[i] = line1.substr(0, pos);
 			i++;
 			line1.erase(0, pos + delimiter.length());
 		}
@@ -243,8 +238,7 @@ void Parse_World()
 		string individual2[5];
 		while ((pos = line2.find(delimiter)) != string::npos)
 		{
-			token = line2.substr(0, pos);
-			individual2[i] = token;
+			individual2[i] = line2.substr(0, pos);
 			i++;
 			line2.erase(0, pos + delimiter.length());
 		}
