@@ -387,7 +387,13 @@ void DeleteUserGivenInd(World * w)
 	Individual_Carateristics(individual_del);
 	DeleteIndividual(w,individual_del,ind);
 	ind=DeleteRelations(ind);
-	ind->prev->next=ind->next;
+
+	if(ind->prev!=NULL)
+		ind->prev->next=ind->next;
+
+	else
+		w->Head=ind->next;
+	
 
 	if(ind->next!=NULL)
 	{
