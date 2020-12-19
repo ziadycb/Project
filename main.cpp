@@ -186,7 +186,8 @@ void DisplayRelations(World * w)
 		Friend* curr = cur->myFriends;
 		if (isEmpty_Friend(curr))
 		{
-			cout << "No Friends";
+			cout << "No Friends"<<endl;
+			return;
 		}
         
 		while (curr != NULL)
@@ -268,9 +269,9 @@ World* Parse_World()
 void Individual_Carateristics(string individualInfo[]) {
 
 	cout<<"Give us the First name: ";
-	cin>>individualInfo[0];
+	getline(cin,individualInfo[0]);
 	cout<<"Give us the Last name: ";
-	cin>>individualInfo[1];
+	getline(cin,individualInfo[1]);
 	cout<<"Give us the age: ";
 	cin>>individualInfo[2];
 	cout<<"Give us the gender(male/female): ";
@@ -324,9 +325,9 @@ void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
 Individual *DeleteRelations(Individual *individualSelf){
 	 
 	struct Friend *temp;
-	struct Friend *prev,*head;
+	struct Friend *prev;
 	Individual *tempI;
-	head=temp;
+
 	while(individualSelf->myFriends!=NULL){
 		temp=individualSelf->myFriends;
 		tempI=temp->self;
@@ -361,9 +362,6 @@ if(temp->next!=NULL){
 				break;
 			}	
 		}
-		
-	cout<<"yay";
-	//individualSelf->myFriends->self->myFriends->next=NULL;
 		
 }
 else {
@@ -406,6 +404,51 @@ void DeleteUserGivenInd(World * w)
 	return;
 }
 
+Individual* CreateIndividual(string individualInfo[]){
+	Individual * curr = new Individual;
+	strcpy_s(curr->FirstName, individualInfo[0].c_str());
+	strcpy_s(curr->LastName, individualInfo[1].c_str());
+	strcpy_s(curr->University, individualInfo[4].c_str());
+
+	stringstream ss(individualInfo[2]);
+	ss >> curr->Age;
+
+	if (individualInfo[3] == "male")
+	{
+		curr->gender = 0;
+	}
+	else
+	{
+		curr->gender = 1;
+	}
+	return curr;
+}
+
+void ChooseIndividuals(World *& w)
+{
+	Individual * ind1 = new Individual;
+	Individual * ind2 = new Individual;
+	string individual1[5],individual2[5];
+
+	Individual_Carateristics(individual1);
+	Individual_Carateristics(individual2);
+	ind1=CreateIndividual(individual1);
+	ind2=CreateIndividual(individual2);
+
+	if(CheckIfIndividualExists(w,ind1)==false || CheckIfIndividualExists(w,ind2)==false )
+	{
+		cout<<"One of thes Individuals doesn't exist cannot create relation";
+		return;
+	}
+	else
+	{
+		ind1=CheckIfIndividualExists2(w,ind1);
+		ind2=CheckIfIndividualExists2(w,ind2);
+		CreateRelation(w,ind1,ind2);
+	}
+
+}
+
 int main(int argc, char** argv) {
 
 	World *world = Initialize_World();
@@ -414,8 +457,10 @@ int main(int argc, char** argv) {
 	UserGivenInd(world);
 	DisplayRelations(world);
     display(world);
-	DeleteUserGivenInd(world);
+	// DeleteUserGivenInd(world);
+	// DisplayRelations(world);
+	// display(world);
+	ChooseIndividuals(world);
 	DisplayRelations(world);
-	display(world);
 	return 0;
 }
