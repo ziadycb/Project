@@ -343,29 +343,28 @@ else{
 if(temp->next!=NULL){
 	int x=0;
 		
-	while(temp->self->Age != individualSelf->Age && strcmp(temp->self->FirstName, individualSelf->FirstName) != 0 && 
-			strcmp(temp->self->FirstName, individualSelf->FirstName) != 0 &&
-			temp->self->gender != individualSelf->gender
-			&& strcmp(temp->self->University, individualSelf->University) != 0 && temp!=NULL )
+	while(temp->next!=NULL )
 		{
 			cout<<"Testing"<<endl;
 			prev=temp;
 			temp=temp->next;
 			cout<<"Testing2"<<endl;
-			if(x>0)
-			individualSelf->myFriends->self->myFriends=individualSelf->myFriends->self->myFriends->next;
+			// if(x>0)
+			// individualSelf->myFriends->self->myFriends=individualSelf->myFriends->self->myFriends->next;
 			x++;
+			if(temp->self->Age == individualSelf->Age && strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 && 
+			strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 &&
+			temp->self->gender == individualSelf->gender
+			&& strcmp(temp->self->University, individualSelf->University) == 0 && temp!=NULL)
+			{
+				prev->next=temp->next;
+				break;
+			}	
 		}
-		if(temp->next!=NULL){
-		prev=temp;
-		temp=temp->next;
-		prev->next=temp->next;
-		cout<<"Testing3";
-		}
-		else{
-			
-			individualSelf->myFriends->self->myFriends->next=NULL;
-		}
+		
+	cout<<"yay";
+	//individualSelf->myFriends->self->myFriends->next=NULL;
+		
 }
 else {
 	temp=NULL;
@@ -388,7 +387,7 @@ void DeleteUserGivenInd(World * w)
 	Individual_Carateristics(individual_del);
 	DeleteIndividual(w,individual_del,ind);
 	ind=DeleteRelations(ind);
-	//ind->prev->next=ind->next;
+	ind->prev->next=ind->next;
 
 	if(ind->next!=NULL)
 	{
