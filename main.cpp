@@ -567,6 +567,8 @@ void Unload_World(World *w)
 	ofstream ofFile("output.txt");
 	Individual *ind=w->Head;
 	Friend *mfriend=ind->myFriends;
+	int lines=0;
+
 	while(ind!=NULL)
 	{
 		while(mfriend!=NULL)
@@ -593,11 +595,46 @@ void Unload_World(World *w)
 				ofFile<<"female";
 			}
 			ofFile<<"#"<<mfriend->self->University<<"\n";
+			lines++;
 			mfriend=mfriend->next;
 		}
 		ind=ind->next;
-		mfriend=ind->myFriends;
+		if(ind !=NULL)
+			mfriend=ind->myFriends;
 	}
+	ofFile.close();
+
+	string Column1[lines],Column2[lines];
+	ifstream inFile("output.txt");
+	for(int i=0;i<lines;i++)
+	{	
+		getline(inFile, Column1[i], ',');
+		getline(inFile, Column2[i], '\n');
+	}
+
+	for(int i=0;i<lines;i++)
+	{	
+		for(int j=0;j<lines;j++)
+		{
+			if(Column1[i]==Column2[j] && Column2[i]==Column1[j])
+				{
+					for(int k=j;k<lines-1;k++)
+					{
+						Column1[k]=Column1[k+1];
+						Column2[k]=Column2[k+1];
+						
+					}
+					lines--;
+				}
+			
+		}
+	}
+	inFile.close();
+
+	ofstream ofFile2("output.txt");
+	for(int i=0;i<lines;i++)
+		ofFile2<<Column1[i]<<","<<Column2[i]<<'\n';
+
 }
 
 
