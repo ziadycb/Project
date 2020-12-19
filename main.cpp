@@ -310,36 +310,36 @@ void UserGivenInd(World *& w)
 	w=Insert_Individual(w, individual, ind);
 }
 
-void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
-{
-	Individual * curr = new Individual;
-	strcpy_s(curr->FirstName, individualInfo[0].c_str());
-	strcpy_s(curr->LastName, individualInfo[1].c_str());
-	strcpy_s(curr->University, individualInfo[4].c_str());
+// void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
+// {
+// 	Individual * curr = new Individual;
+// 	strcpy_s(curr->FirstName, individualInfo[0].c_str());
+// 	strcpy_s(curr->LastName, individualInfo[1].c_str());
+// 	strcpy_s(curr->University, individualInfo[4].c_str());
 
-	stringstream ss(individualInfo[2]);
-	ss >> curr->Age;
-	if (individualInfo[3] == "male")
-	{
-		curr->gender = 0;
-	}
-	else
-	{
-		curr->gender = 1;
-	}
-	 if (CheckIfIndividualExists(w, curr) == true)
-	{
-		cout << "Invidivual Exists -- Continuing..." << endl;
-		ind = CheckIfIndividualExists2(w, curr);
-		return;
-	}
+// 	stringstream ss(individualInfo[2]);
+// 	ss >> curr->Age;
+// 	if (individualInfo[3] == "male")
+// 	{
+// 		curr->gender = 0;
+// 	}
+// 	else
+// 	{
+// 		curr->gender = 1;
+// 	}
+// 	 if (CheckIfIndividualExists(w, curr) == true)
+// 	{
+// 		cout << "Invidivual Exists -- Continuing..." << endl;
+// 		ind = CheckIfIndividualExists2(w, curr);
+// 		return;
+// 	}
 
-	else
-	{
-		cout<<"This individual doesn't exist";
-	}
+// 	else
+// 	{
+// 		cout<<"This individual doesn't exist";
+// 	}
 	
-}
+// }
 
 Individual *DeleteRelations(Individual *individualSelf){
 	 
@@ -402,8 +402,15 @@ void DeleteUserGivenInd(World * w)
 	string individual_del[5];
 
 	Individual_Carateristics(individual_del);
-	DeleteIndividual(w,individual_del,ind);
-	ind=DeleteRelations(ind);
+	ind=CreateIndividual(individual_del);
+	if(CheckIfIndividualExists(w,ind)){
+		ind=CheckIfIndividualExists2(w,ind);
+		ind=DeleteRelations(ind);
+	}
+	else{
+		cout<<"Individual doesn't exist"<<endl;
+		return;
+	}
 
 	if(ind->prev!=NULL)
 		ind->prev->next=ind->next;
@@ -457,10 +464,12 @@ int main(int argc, char** argv) {
 	UserGivenInd(world);
 	DisplayRelations(world);
     display(world);
-	// DeleteUserGivenInd(world);
-	// DisplayRelations(world);
-	// display(world);
-	ChooseIndividuals(world);
+
+	DeleteUserGivenInd(world);
 	DisplayRelations(world);
+	display(world);
+
+	//ChooseIndividuals(world);
+	//DisplayRelations(world);
 	return 0;
 }
