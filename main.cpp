@@ -265,6 +265,25 @@ World* Parse_World()
 	inFile.close();
 	return world;
 }
+Individual* CreateIndividual(string individualInfo[]){
+	Individual * curr = new Individual;
+	strcpy_s(curr->FirstName, individualInfo[0].c_str());
+	strcpy_s(curr->LastName, individualInfo[1].c_str());
+	strcpy_s(curr->University, individualInfo[4].c_str());
+
+	stringstream ss(individualInfo[2]);
+	ss >> curr->Age;
+
+	if (individualInfo[3] == "male")
+	{
+		curr->gender = 0;
+	}
+	else
+	{
+		curr->gender = 1;
+	}
+	return curr;
+}
 
 void Individual_Carateristics(string individualInfo[]) {
 
@@ -404,25 +423,6 @@ void DeleteUserGivenInd(World * w)
 	return;
 }
 
-Individual* CreateIndividual(string individualInfo[]){
-	Individual * curr = new Individual;
-	strcpy_s(curr->FirstName, individualInfo[0].c_str());
-	strcpy_s(curr->LastName, individualInfo[1].c_str());
-	strcpy_s(curr->University, individualInfo[4].c_str());
-
-	stringstream ss(individualInfo[2]);
-	ss >> curr->Age;
-
-	if (individualInfo[3] == "male")
-	{
-		curr->gender = 0;
-	}
-	else
-	{
-		curr->gender = 1;
-	}
-	return curr;
-}
 
 void ChooseIndividuals(World * w)
 {
