@@ -82,8 +82,6 @@ Individual * CheckIfIndividualExists2(World* world, Individual* ind)
 	Individual *cur = world->Head;
 	while (cur != NULL)
 	{
-		//cout << "Comparing: " <<endl << ind->FirstName << "," << ind->LastName << "," << ind->Age << "," << ind->gender << "," << ind->University;
-		//cout << endl << cur->FirstName << "," << cur->LastName << "," << cur->Age << "," << cur->gender << "," << cur->University << endl;
 		if (strcmp(ind->FirstName, cur->FirstName) == 0 && strcmp(ind->LastName, cur->LastName) == 0 &&
 			ind->Age == cur->Age && ind->gender == cur->gender
 			&& strcmp(ind->University, cur->University) == 0)
@@ -173,6 +171,7 @@ void CreateRelation(World * w, Individual* ind, Individual *fri)
 	ind->myFriends = InsertFriend(ind->myFriends, fri);
 	fri->myFriends = InsertFriend(fri->myFriends, ind);
 }
+
 void DisplayRelations(World * w)
 {
 	if (isEmpty_World(w))
@@ -202,7 +201,7 @@ void DisplayRelations(World * w)
 	return;
 }
 
-void Parse_World()
+World* Parse_World()
 {
 	ifstream inFile("Filex.txt");
 	string line1;
@@ -263,12 +262,93 @@ void Parse_World()
 	cout << "----- END -------------" << endl;
 	display(world);
 	inFile.close();
+	return world;
+}
+
+void Individual_Carateristics(string individualInfo[]) {
+
+	cout<<"Give us the First name: ";
+	cin>>individualInfo[0];
+	cout<<"Give us the Last name: ";
+	cin>>individualInfo[1];
+	cout<<"Give us the age: ";
+	cin>>individualInfo[2];
+	cout<<"Give us the gender(male/female): ";
+	cin>>individualInfo[3];
+	cout<<"Give us the University name: ";
+	cin.ignore();
+	getline(cin,individualInfo[4]);
+	
+}
+
+void UserGivenInd(World *& w)
+{
+	Individual * ind = new Individual;
+	string individual[5];
+
+	Individual_Carateristics(individual);
+	w=Insert_Individual(w, individual, ind);
+}
+
+void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
+{
+	Individual * curr = new Individual;
+	strcpy_s(curr->FirstName, individualInfo[0].c_str());
+	strcpy_s(curr->LastName, individualInfo[1].c_str());
+	strcpy_s(curr->University, individualInfo[4].c_str());
+
+	stringstream ss(individualInfo[2]);
+	ss >> curr->Age;
+	if (individualInfo[3] == "male")
+	{
+		curr->gender = 0;
+	}
+	else
+	{
+		curr->gender = 1;
+	}
+	 if (CheckIfIndividualExists(w, curr) == true)
+	{
+		cout << "Invidivual Exists -- Continuing..." << endl;
+		ind = CheckIfIndividualExists2(w, curr);
+		return;
+	}
+
+	else
+	{
+		cout<<"This individual doesn't exist";
+	}
+	
+}
+
+void DeleteUserGivenInd(World * w)
+{
+	Individual * ind = new Individual;
+	string individual_del[5];
+
+	Individual_Carateristics(individual_del);
+	DeleteIndividual(w,individual_del,ind);
+	ind->prev->next=ind->next;
+
+	if(ind->next!=NULL)
+	{
+		ind->next->prev=ind->prev;
+	}
+	else
+		w->Tail=ind->next;
+
+	
+	return;
 }
 
 int main(int argc, char** argv) {
 
-	Parse_World();
+	World *world = Initialize_World();
 
-    
+	world=Parse_World();
+	UserGivenInd(world);
+    display(world);
+	DeleteUserGivenInd(world);
+	display(world);
 	return 0;
 }
