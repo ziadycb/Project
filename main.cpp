@@ -287,6 +287,7 @@ Individual* CreateIndividual(string individualInfo[]){
 
 void Individual_Carateristics(string individualInfo[]) {
 
+	cin.ignore();
 	cout<<"Give us the First name: ";
 	getline(cin,individualInfo[0]);
 	cout<<"Give us the Last name: ";
@@ -568,9 +569,11 @@ void Unload_World(World *w)
 	Individual *ind=w->Head;
 	Friend *mfriend=ind->myFriends;
 	int lines=0;
+	
 
 	while(ind!=NULL)
 	{
+		
 		while(mfriend!=NULL)
 		{
 			ofFile<<ind->FirstName<<"#"<<ind->LastName<<"#"<<ind->Age<<"#";
@@ -632,28 +635,95 @@ void Unload_World(World *w)
 	inFile.close();
 
 	ofstream ofFile2("output.txt");
-	for(int i=0;i<lines;i++)
+	for(int i=0;i<lines-1;i++)
+	{
 		ofFile2<<Column1[i]<<","<<Column2[i]<<'\n';
+	}
+	ofFile2<<Column1[lines-1]<<","<<Column2[lines-1];
 
+}
+
+bool Search_Relation(World *w)
+{
+	Individual * ind1 = new Individual;
+	string individual1[5];
+	Individual_Carateristics(individual1);
+	ind1=CreateIndividual(individual1);
+
+	if(CheckIfIndividualExists(w,ind1)==false)
+		return NULL;
+
+	else
+	{	
+		cout<<"Individual Found";
+		return true;
+	}
 }
 
 
 int main(int argc, char** argv) {
 
 	World *world = Initialize_World();
+	int x=0; //to break menu
 	
 	world=Parse_World();
-	//UserGivenInd(world);
-	//DisplayRelations(world);
-    //display(world);
 
-	// DeleteUserGivenInd(world);
-	// DisplayRelations(world);
-	// display(world);
+	int userInput;
+	while(x==0){
 
-	Unload_World(world);
+	cout<<"Enter the number of what you want to do"<<endl;
+	cout<<"1- Add Individual to the list "<<endl;
+	cout<<"2- Delete Individual from the list "<<endl;
+	cout<<"3- Search for a person in the list "<<endl;
+	cout<<"4- Create a relation between 2 individuals"<<endl;
+	cout<<"5- Remove a relation between 2 individuals"<<endl;
+	cout<<"6- Get mutual friends of 2 individuals"<<endl;
+	cout<<"7- Output the world to a new txt file"<<endl;
+	cout<<"8- Finish the program"<<endl;
+	cin>>userInput;
 
-	//ChooseIndividuals(world,2);
-	//DisplayRelations(world);
+	switch(userInput)
+	{
+		case 1:
+		UserGivenInd(world);
+		//DisplayRelations(world);
+    	//display(world);
+		break;
+		
+		case 2:
+		DeleteUserGivenInd(world);
+		// DisplayRelations(world);
+		// display(world);
+		break;
+
+		case 3:
+		Search_Relation(world);
+		break;
+
+		case 4:
+		ChooseIndividuals(world,0);
+		//DisplayRelations(world);
+		break;
+
+		case 5:
+		ChooseIndividuals(world,1);
+		//DisplayRelations(world);
+		break;
+
+		case 6:
+		ChooseIndividuals(world,2);
+		//DisplayRelations(world);
+		break;
+
+		case 7:
+		Unload_World(world);
+		break;
+
+		case 8:
+		x=1;
+
+	}
+}
+	
 	return 0;
 }
