@@ -424,7 +424,7 @@ Individual* CreateIndividual(string individualInfo[]){
 	return curr;
 }
 
-void ChooseIndividuals(World *& w)
+void ChooseIndividuals(World * w)
 {
 	Individual * ind1 = new Individual;
 	Individual * ind2 = new Individual;
@@ -437,7 +437,7 @@ void ChooseIndividuals(World *& w)
 
 	if(CheckIfIndividualExists(w,ind1)==false || CheckIfIndividualExists(w,ind2)==false )
 	{
-		cout<<"One of thes Individuals doesn't exist cannot create relation";
+		cout<<"One of thes Individuals doesn't exist cannot create relation"<<endl;
 		return;
 	}
 	else
