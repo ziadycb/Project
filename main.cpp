@@ -309,37 +309,39 @@ void UserGivenInd(World *& w)
 	Individual_Carateristics(individual);
 	w=Insert_Individual(w, individual, ind);
 }
+/* This is obsolete now keeping it in case the program breaks
 
-// void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
-// {
-// 	Individual * curr = new Individual;
-// 	strcpy_s(curr->FirstName, individualInfo[0].c_str());
-// 	strcpy_s(curr->LastName, individualInfo[1].c_str());
-// 	strcpy_s(curr->University, individualInfo[4].c_str());
+ void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
+ {
+ 	Individual * curr = new Individual;
+ 	strcpy_s(curr->FirstName, individualInfo[0].c_str());
+ 	strcpy_s(curr->LastName, individualInfo[1].c_str());
+ 	strcpy_s(curr->University, individualInfo[4].c_str());
 
-// 	stringstream ss(individualInfo[2]);
-// 	ss >> curr->Age;
-// 	if (individualInfo[3] == "male")
-// 	{
-// 		curr->gender = 0;
-// 	}
-// 	else
-// 	{
-// 		curr->gender = 1;
-// 	}
-// 	 if (CheckIfIndividualExists(w, curr) == true)
-// 	{
-// 		cout << "Invidivual Exists -- Continuing..." << endl;
-// 		ind = CheckIfIndividualExists2(w, curr);
-// 		return;
-// 	}
+ 	stringstream ss(individualInfo[2]);
+ 	ss >> curr->Age;
+ 	if (individualInfo[3] == "male")
+ 	{
+ 		curr->gender = 0;
+ 	}
+	else
+ 	{
+ 		curr->gender = 1;
+ 	}
+ 	 if (CheckIfIndividualExists(w, curr) == true)
+ 	{
+		cout << "Invidivual Exists -- Continuing..." << endl;
+ 		ind = CheckIfIndividualExists2(w, curr);
+ 		return;
+ 	}
 
-// 	else
-// 	{
-// 		cout<<"This individual doesn't exist";
-// 	}
+ 	else
+ 	{
+ 		cout<<"This individual doesn't exist";
+ 	}
 	
-// }
+ }
+ */
 
 Individual *DeleteRelations(Individual *individualSelf){
 	 
@@ -430,8 +432,90 @@ void DeleteUserGivenInd(World * w)
 	return;
 }
 
+Friend* RemoveFriend(Friend *head, Individual *individualSelf)
+{
+	struct Friend *temp;
+    temp = (struct Friend*)malloc(sizeof(struct Friend));
+	Friend *prev;
+	temp= head;
 
-void ChooseIndividuals(World * w)
+	if(temp->next==NULL)
+	{
+		head=NULL;
+		return head;
+	}
+
+if(temp->self->Age == individualSelf->Age && strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 && 
+			strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 &&
+			temp->self->gender == individualSelf->gender
+			&& strcmp(temp->self->University, individualSelf->University) == 0 && temp!=NULL)
+			{
+				temp=temp->next;
+				return head;
+			}
+else{
+	while(temp !=NULL){
+
+		if(temp->self->Age == individualSelf->Age && strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 && 
+			strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 &&
+			temp->self->gender == individualSelf->gender
+			&& strcmp(temp->self->University, individualSelf->University) == 0 && temp!=NULL)
+			{
+				prev->next=temp->next;
+			}
+		prev=temp;
+		temp=temp->next;
+	}
+}
+	
+	return head;
+}
+
+void DeleteRelation(World * w, Individual* ind, Individual *fri)
+{
+	ind->myFriends = RemoveFriend(ind->myFriends, fri);
+	fri->myFriends = RemoveFriend(fri->myFriends, ind);
+}
+
+bool CheckRelation(Friend *ind,Individual *individualSelf)
+{
+	while(ind !=NULL)
+	{
+		if(ind->self->Age == individualSelf->Age && strcmp(ind->self->FirstName, individualSelf->FirstName) == 0 && 
+			strcmp(ind->self->FirstName, individualSelf->FirstName) == 0 &&
+			ind->self->gender == individualSelf->gender
+			&& strcmp(ind->self->University, individualSelf->University) == 0 && ind!=NULL)
+				return true;
+
+		ind=ind->next;
+	}
+	return false;
+}
+
+void DisplayMutualRelations(Individual *ind,Individual *ind2)
+{
+	Friend * temp,*temp2;
+	temp=ind->myFriends;
+	temp2=ind2->myFriends;
+
+	while(temp!=NULL)
+	{
+		while(temp2!=NULL)
+		{
+			if(temp->self->Age == temp2->self->Age && strcmp(temp->self->FirstName, temp2->self->FirstName) == 0 && 
+			strcmp(temp->self->LastName, temp2->self->LastName) == 0 &&
+			temp->self->gender == temp2->self->gender
+			&& strcmp(temp->self->University, temp2->self->University) == 0 && ind!=NULL)
+			{
+				cout<<temp->self->FirstName<<" "<<temp->self->LastName<<" is a mutual friend"<<endl;
+			}
+			temp2=temp2->next;
+		}
+		temp=temp->next;
+	}
+}
+
+void ChooseIndividuals(World * w ,int bin)
 {
 	Individual * ind1 = new Individual;
 	Individual * ind2 = new Individual;
@@ -444,32 +528,95 @@ void ChooseIndividuals(World * w)
 
 	if(CheckIfIndividualExists(w,ind1)==false || CheckIfIndividualExists(w,ind2)==false )
 	{
-		cout<<"One of thes Individuals doesn't exist cannot create relation"<<endl;
+		cout<<"One of thes Individuals doesn't exist cannot proceed"<<endl;
 		return;
 	}
 	else
 	{
 		ind1=CheckIfIndividualExists2(w,ind1);
 		ind2=CheckIfIndividualExists2(w,ind2);
-		CreateRelation(w,ind1,ind2);
+		if(bin==0)
+		{
+			if(CheckRelation(ind1->myFriends,ind2))
+			{
+				cout<<"Relation Already Exists"<<endl;
+				return;
+			}
+			CreateRelation(w,ind1,ind2);
+		}
+		else if(bin==1)
+		{
+			if(CheckRelation(ind1->myFriends,ind2))
+				DeleteRelation(w,ind1,ind2);
+			else
+			{
+				cout<<"Relation doesn't exist"<<endl;
+				return;
+			}
+		}
+		else if(bin==2)
+		{
+			DisplayMutualRelations(ind1,ind2);
+		}	
 	}
 
 }
 
+void Unload_World(World *w)
+{
+	ofstream ofFile("output.txt");
+	Individual *ind=w->Head;
+	Friend *mfriend=ind->myFriends;
+	while(ind!=NULL)
+	{
+		while(mfriend!=NULL)
+		{
+			ofFile<<ind->FirstName<<"#"<<ind->LastName<<"#"<<ind->Age<<"#";
+			if(ind->gender==0)
+			{
+				ofFile<<"male";
+			}
+			else
+			{
+				ofFile<<"female";
+			}
+			ofFile<<"#"<<ind->University<<",";
+			
+			ofFile<<mfriend->self->FirstName<<"#"<<mfriend->self->LastName<<"#"<<mfriend->self->Age<<"#";
+
+			if(mfriend->self->gender==0)
+			{
+				ofFile<<"male";
+			}
+			else
+			{
+				ofFile<<"female";
+			}
+			ofFile<<"#"<<mfriend->self->University<<"\n";
+			mfriend=mfriend->next;
+		}
+		ind=ind->next;
+		mfriend=ind->myFriends;
+	}
+}
+
+
 int main(int argc, char** argv) {
 
 	World *world = Initialize_World();
-
+	
 	world=Parse_World();
-	UserGivenInd(world);
-	DisplayRelations(world);
-    display(world);
+	//UserGivenInd(world);
+	//DisplayRelations(world);
+    //display(world);
 
-	DeleteUserGivenInd(world);
-	DisplayRelations(world);
-	display(world);
+	// DeleteUserGivenInd(world);
+	// DisplayRelations(world);
+	// display(world);
 
-	//ChooseIndividuals(world);
+	Unload_World(world);
+
+	//ChooseIndividuals(world,2);
 	//DisplayRelations(world);
 	return 0;
 }
