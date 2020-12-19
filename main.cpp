@@ -321,6 +321,65 @@ void DeleteIndividual(World * w, string individualInfo[], Individual *&ind)
 	
 }
 
+Individual *DeleteRelations(Individual *individualSelf){
+	 
+	struct Friend *temp;
+	struct Friend *prev,*head;
+	Individual *tempI;
+	head=temp;
+	while(individualSelf->myFriends!=NULL){
+		temp=individualSelf->myFriends;
+		tempI=temp->self;
+		temp=tempI->myFriends;
+
+if(temp->self->Age == individualSelf->Age && strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 && 
+			strcmp(temp->self->FirstName, individualSelf->FirstName) == 0 &&
+			temp->self->gender == individualSelf->gender
+			&& strcmp(temp->self->University, individualSelf->University) == 0 && temp!=NULL)
+			{
+				individualSelf->myFriends->self->myFriends=temp->next;
+			}	
+else{
+if(temp->next!=NULL){
+	int x=0;
+		
+	while(temp->self->Age != individualSelf->Age && strcmp(temp->self->FirstName, individualSelf->FirstName) != 0 && 
+			strcmp(temp->self->FirstName, individualSelf->FirstName) != 0 &&
+			temp->self->gender != individualSelf->gender
+			&& strcmp(temp->self->University, individualSelf->University) != 0 && temp!=NULL )
+		{
+			cout<<"Testing"<<endl;
+			prev=temp;
+			temp=temp->next;
+			cout<<"Testing2"<<endl;
+			if(x>0)
+			individualSelf->myFriends->self->myFriends=individualSelf->myFriends->self->myFriends->next;
+			x++;
+		}
+		if(temp->next!=NULL){
+		prev=temp;
+		temp=temp->next;
+		prev->next=temp->next;
+		cout<<"Testing3";
+		}
+		else{
+			
+			individualSelf->myFriends->self->myFriends->next=NULL;
+		}
+}
+else {
+	temp=NULL;
+}
+}
+		if(individualSelf->next==NULL)
+			break;
+		cout<<"Alive"<<endl;
+		individualSelf->myFriends=individualSelf->myFriends->next;
+}
+
+	return individualSelf;
+
+}
 void DeleteUserGivenInd(World * w)
 {
 	Individual * ind = new Individual;
@@ -328,7 +387,8 @@ void DeleteUserGivenInd(World * w)
 
 	Individual_Carateristics(individual_del);
 	DeleteIndividual(w,individual_del,ind);
-	ind->prev->next=ind->next;
+	ind=DeleteRelations(ind);
+	//ind->prev->next=ind->next;
 
 	if(ind->next!=NULL)
 	{
@@ -347,8 +407,10 @@ int main(int argc, char** argv) {
 
 	world=Parse_World();
 	UserGivenInd(world);
+	DisplayRelations(world);
     display(world);
 	DeleteUserGivenInd(world);
+	DisplayRelations(world);
 	display(world);
 	return 0;
 }
