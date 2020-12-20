@@ -113,7 +113,7 @@ World * Insert_Individual(World * w, string individualInfo[], Individual *&ind)
 	}
 	if (CheckIfIndividualExists(w, curr) == true)
 	{
-		cout << "Invidivual Exists -- Continuing..." << endl;
+		//cout << "Invidivual Exists -- Continuing..." << endl;
 		ind = CheckIfIndividualExists2(w, curr);
 		return w;
 	}
@@ -213,7 +213,7 @@ World* Parse_World()
 	{
 		getline(inFile, line1, ',');
 		getline(inFile, line2, '\n');
-		cout << line1 << "\n";
+		
 
 
 		// Individual 1    
@@ -232,7 +232,7 @@ World* Parse_World()
 
 
 		// Individual 2
-		cout << line2 << "\n";
+		
 		pos = 0;
 		i = 0;
 		string individual2[5];
@@ -250,18 +250,14 @@ World* Parse_World()
 		Individual * fri = new Individual;
 		world = Insert_Individual(world, individual1, ind);
 		world = Insert_Individual(world, individual2, fri);
-		cout << ind->FirstName << "," << ind->LastName << "," << ind->Age << "," << ind->gender << "," << ind->University << endl;
-		cout << fri->FirstName << "," << fri->LastName << "," << fri->Age << "," << fri->gender << "," << fri->University << endl;
+		
 
-        if(ind->myFriends==NULL)
-            cout<<"HELLO";
+        
 
 		CreateRelation(world, ind, fri);
-		cout << "--- END OF LOOP ----" << endl;
+		
 	}
-	DisplayRelations(world);
-	cout << "----- END -------------" << endl;
-	display(world);
+	
 	inFile.close();
 	return world;
 }
@@ -368,10 +364,10 @@ if(temp->next!=NULL){
 		
 	while(temp->next!=NULL )
 		{
-			cout<<"Testing"<<endl;
+			//cout<<"Testing"<<endl;
 			prev=temp;
 			temp=temp->next;
-			cout<<"Testing2"<<endl;
+			//cout<<"Testing2"<<endl;
 			// if(x>0)
 			// individualSelf->myFriends->self->myFriends=individualSelf->myFriends->self->myFriends->next;
 			x++;
@@ -392,7 +388,7 @@ else {
 }
 		if(individualSelf->next==NULL)
 			break;
-		cout<<"Alive"<<endl;
+		//cout<<"Alive"<<endl;
 		individualSelf->myFriends=individualSelf->myFriends->next;
 }
 
@@ -780,7 +776,7 @@ int main(int argc, char** argv) {
 	int userInput;
 	while(x==0){
 
-	cout<<"Enter the number of what you want to do"<<endl;
+	cout<<endl<<"Enter the number of what you want to do"<<endl;
 	cout<<"1- Add Individual to the list "<<endl;
 	cout<<"2- Delete Individual from the list "<<endl;
 	cout<<"3- Search for a person in the list "<<endl;
@@ -790,6 +786,8 @@ int main(int argc, char** argv) {
 	cout<<"7- Output the world to a new txt file"<<endl;
 	cout<<"8- Finish the program"<<endl;
 	cout<<"9- Suggest a friend for individual"<<endl;
+	cout<<"10- Display all relations in console"<<endl;
+	cout<<"11- Display all Individuals in console"<<endl<<endl;
 	cin>>userInput;
 
 	switch(userInput)
@@ -835,6 +833,14 @@ int main(int argc, char** argv) {
 
 		case 9:
 		SuggestFriend(world);
+		break;
+
+		case 10:
+		DisplayRelations(world);
+		break;
+
+		case 11:
+		display(world);
 		break;
 	}
 }
