@@ -660,6 +660,115 @@ bool Search_Relation(World *w)
 	}
 }
 
+int CountMutualRelations(Individual *ind,Individual *ind2)
+{
+	Friend * temp,*temp2;
+	temp=ind->myFriends;
+	temp2=ind2->myFriends;
+	int counter=0;
+
+	while(temp!=NULL)
+	{
+		while(temp2!=NULL)
+		{
+			if(temp->self->Age == temp2->self->Age && strcmp(temp->self->FirstName, temp2->self->FirstName) == 0 && 
+			strcmp(temp->self->LastName, temp2->self->LastName) == 0 &&
+			temp->self->gender == temp2->self->gender
+			&& strcmp(temp->self->University, temp2->self->University) == 0 && ind!=NULL)
+			{
+				counter++;
+			}
+			temp2=temp2->next;
+		}
+		temp=temp->next;
+	}
+	return counter;
+}
+
+/* This function suggest friends based on a point system i used every criteria Age,University,gender and mutual friends
+the smaller the age differnce the more point , same gender is extra points , same univesity is extra points too
+for every mutual friend extra points.
+*/
+void SuggestFriend(World *w)
+{
+	Individual * ind1 = new Individual;
+	Individual * ind=w->Head;
+	string individual1[5];
+	int ageD;
+	int points[100]={0};
+	string fullnames[100];
+	int counter=0;
+
+	Individual_Carateristics(individual1);
+	ind1=CreateIndividual(individual1);
+
+	if(CheckIfIndividualExists(w,ind1))
+	{
+		while(ind!=NULL)
+		{
+			
+		if(strcmp(ind->FirstName, ind1->FirstName)  == 0 &&
+		ind->Age==ind1->Age && strcmp(ind->LastName, ind1->LastName)  == 0 &&
+		  strcmp(ind->University, ind1->University) == 0){ind=ind->next;}
+
+		 else {
+			fullnames[counter]= string(ind->FirstName) + " " + string(ind->LastName);
+			if(ind->Age>=ind1->Age)
+				ageD=ind->Age-ind1->Age;
+			else
+			{
+					ageD=ind1->Age-ind->Age;
+			}
+			
+			if(ageD<=5)
+				points[counter]+=5;
+			
+			if(ageD>5 && ageD<=15)
+				points[counter]+=2;
+
+			if(ageD>15 && ageD<25)
+				points[counter]+=1;
+			
+			if(ind->gender==ind1->gender)
+				points[counter]+=1;
+
+			if(string(ind->University)==string(ind1->University))
+				points[counter]+=5;
+
+			points[counter]+=CountMutualRelations(ind,ind1);
+
+			ind=ind->next;
+			counter++;
+		  }
+
+		}
+	}
+
+	else
+	{
+		cout<<"Individual doesn't exist";
+		return;
+	}
+
+	for(int i=0; i < counter ; i++)
+	{
+		for(int j=0; j< counter-i ; j++)
+		{
+			if(points[j] < points[j+1])
+			{
+				swap(points[j], points[j+1]);
+				swap(fullnames[j], fullnames[j+1]);
+			}
+		}
+	}
+
+	for(int i=0; i < counter ; i++)
+	{
+		cout<<fullnames[i]<<" has : "<<points[i]<<endl;
+	}
+
+}
+
 
 int main(int argc, char** argv) {
 
@@ -680,6 +789,7 @@ int main(int argc, char** argv) {
 	cout<<"6- Get mutual friends of 2 individuals"<<endl;
 	cout<<"7- Output the world to a new txt file"<<endl;
 	cout<<"8- Finish the program"<<endl;
+	cout<<"9- Suggest a friend for individual"<<endl;
 	cin>>userInput;
 
 	switch(userInput)
@@ -721,7 +831,11 @@ int main(int argc, char** argv) {
 
 		case 8:
 		x=1;
+		break;
 
+		case 9:
+		SuggestFriend(world);
+		break;
 	}
 }
 	
